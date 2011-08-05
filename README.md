@@ -1,7 +1,8 @@
 jscat
 =====
 
-unit testing for Javascript.
+Unit testing for JavaScript.
+
 
 ```javascript
 if ('undefined' != typeof(require)) {
