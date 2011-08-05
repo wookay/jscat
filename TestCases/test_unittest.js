@@ -9,7 +9,7 @@ Test.test_undefined = function() {
 }
 
 Test.test_number = function() {
-  assert_equal(3, 1+5)
+  assert_equal(3, 1+2)
   assert_equal(3.14, 3.14)
 }
 
@@ -30,7 +30,7 @@ Test.test_hash = function() {
 }
 
 Test.test_function = function() {
-  var f = function() {}
+  var f = function() { }
   assert_equal(f, f)
 }
 

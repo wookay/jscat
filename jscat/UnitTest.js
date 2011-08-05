@@ -12,12 +12,16 @@ function print(str) {
     document.getElementsByTagName('pre')[0].innerHTML += str
   }
 }
-function puts(s) {
-  print(s + LF)
+function puts(str) {
+  print(str + LF)
 }
 
 Object.prototype.inspect = function() {
-  return JSON.stringify(this)
+  if ('function' == typeof(this)) {
+    return this.toString()
+  } else {
+    return JSON.stringify(this)
+  }
 }
 
 function deep_equal(a,b) {
