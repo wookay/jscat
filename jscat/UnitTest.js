@@ -52,10 +52,14 @@ var _assert_equal = function(expected, got, is_true) {
 }
 
 var extract_filename_line_from_stack_trace = function() {
-  Error.captureStackTrace(Test,
-    extract_filename_line_from_stack_trace)
-  var line = Test.stack.split(LF).slice(3,4).toString()
-  return line.match(/\((.*):\d+:*\)/)[1]
+  if ('undefined' == typeof(window)) {
+    Error.captureStackTrace(Test,
+      extract_filename_line_from_stack_trace)
+    var line = Test.stack.split(LF).slice(3,4).toString()
+    return line.match(/\(.*\/(.*):\d+:*\)/)[1]
+  } else {
+    return arguments.callee.caller.caller.caller
+  }
 }
 
 
