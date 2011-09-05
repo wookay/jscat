@@ -16,11 +16,11 @@ function puts(str) {
   print(str + LF)
 }
 
-Object.prototype.inspect = function() {
-  if ('function' == typeof(this)) {
-    return this.toString()
+function inspect(value) {
+  if ('function' == typeof(value)) {
+    return value.toString()
   } else {
-    return JSON.stringify(this)
+    return JSON.stringify(value)
   }
 }
 
@@ -28,7 +28,7 @@ function deep_equal(a,b) {
   if (a == b) {
     return true
   } else if ('object' == typeof(a) && 'object' == typeof(b)) {
-    return a.inspect() == b.inspect()
+    return inspect(a) == inspect(b)
   } else {
     return false
   }
@@ -44,13 +44,13 @@ var _assert_equal = function(expected, got, is_true) {
     if (UnitTest.dot_if_passed) {
       print(DOT)
     } else {
-      puts('passed: ' + expected.inspect())
+      puts('passed: ' + inspect(expected))
     }
   } else {
     puts('\nAssertion failed in ' +
          extract_filename_line_from_stack_trace())
-    puts('Expected: ' + expected.inspect())
-    puts('Got: ' + got.inspect())
+    puts('Expected: ' + inspect(expected))
+    puts('Got: ' + inspect(got))
     UnitTest.failed += 1
   }
 }
