@@ -1,0 +1,14 @@
+{
+  "name": "jscat",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": "wookay/jscat",
+  "bugs": { "url" : "http://github.com/wookay/jscat/issues"
+  },
+  "engines": {
+    "node": ">=0.12.2"
+  },
+  "scripts": {
+    "test": "node TestCases/test_unittest.js"
+  }
+}

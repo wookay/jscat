@@ -1,8 +1,8 @@
 if ('undefined' != typeof(require)) {
-  require.paths.unshift('../jscat')
-  require('UnitTest')
+  require('UnitTest.js')
 }
 
+var Test = {}
 
 Test.test_undefined = function() {
   assert_equal(undefined, undefined)
