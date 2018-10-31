@@ -6,7 +6,7 @@
   "author": "WooKyoung Noh <wookay.noh@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "mucko": "^0.1.0"
+    "mucko": "^0.1.1"
   },
   "scripts": {
     "test": "node test/runtests.js"
