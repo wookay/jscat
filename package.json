@@ -1,14 +1,15 @@
 {
   "name": "jscat",
-  "version": "0.0.1",
+  "version": "0.1.0",
+  "main": "index.js",
+  "repository": "git@github.com:wookay/jscat.git",
+  "author": "WooKyoung Noh <wookay.noh@gmail.com>",
   "license": "MIT",
-  "repository": "wookay/jscat",
-  "bugs": { "url" : "http://github.com/wookay/jscat/issues"
-  },
-  "engines": {
-    "node": ">=0.12.2"
+  "dependencies": {
+    "mucko": "^0.1.0"
   },
   "scripts": {
-    "test": "node TestCases/test_unittest.js"
-  }
+    "test": "node test/runtests.js"
+  },
+  "private": true
 }
