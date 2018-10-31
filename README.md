@@ -4,3 +4,5 @@
 
 * mucko.js
   https://github.com/wookay/mucko
+
+  - run tests https://wookay.github.io/docs/mucko/test/
