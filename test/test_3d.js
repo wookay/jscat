@@ -32,6 +32,7 @@ function winding_order() {
     ];
     var origin  = [260, 180]
     var svg     = d3.select('svg').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
+    var ccw     = true
     var color   = [d3.color('crimson'), d3.color('teal'), d3.color('limegreen'), d3.color('purple'), d3.color('tomato')];
     var alpha   = -0.3097959422289935, beta = -0.6021385919380436, mx = 260, my = 358
     var mouseX  = -69, mouseY = 71
@@ -77,10 +78,10 @@ function winding_order() {
             .append('path')
             .merge(triangles)
             .attr('stroke', function(d, i){
-                return d.ccw ? color[i].brighter(1) : color[i].darker(2);
+                return ccw ? color[i].brighter(1) : color[i].darker(2);
             })
             .attr('fill', function(d, i){
-                return d.ccw ? color[i] : color[i].darker(1);
+                return ccw ? color[i] : color[i].darker(1);
             })
             .attr('fill-opacity', 0.95)
             .sort(_3d.sort)
