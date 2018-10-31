@@ -146,44 +146,6 @@ module.exports = function (str) {
 }
 
 },{}],4:[function(require,module,exports){
-// jscat runtests.js
-
-require("./test_canvas.js")
-
-UnitTest.run(Test)
-
-},{"./test_canvas.js":5}],5:[function(require,module,exports){
-// jscat test_canvas.js
-
-var mucko = require("mucko")
-var Meta = mucko.Meta
-var Test = mucko.Test
-var UnitTest = mucko.UnitTest
-var Base = mucko.Base
-var Sys = mucko.Sys
-var println = Base.println
-var stdout = Base.stdout
-
-
-if (Sys.isbrowser()) {
-    var createCanvas = function (w, h) {
-        var canvas = document.createElement('canvas')
-        canvas.width = w
-        canvas.height = h
-        return canvas
-    }
-} else {
-    var { createCanvas, loadImage, Canvas } = require('canvas')
-}
-
-Test.test_canvas = function () {
-    const canvas = createCanvas(200, 200)
-    const ctx = canvas.getContext('2d')
-    typ = Sys.isbrowser() ? HTMLCanvasElement : Canvas
-    assert_true(Meta.isa(canvas, typ))
-}
-
-},{"canvas":2,"mucko":"mucko"}],6:[function(require,module,exports){
 // mucko Base.js
 
 var meta = require("./Meta.js")
@@ -261,7 +223,7 @@ module.exports = {
     Base,
 }
 
-},{"./Meta.js":7,"./strings.js":10}],7:[function(require,module,exports){
+},{"./Meta.js":5,"./strings.js":8}],5:[function(require,module,exports){
 // mucko Meta.js
 
 class Undefined {
@@ -333,7 +295,7 @@ module.exports = {
     Bool,
 }
 
-},{}],8:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 // mucko Sys.js
 
 Sys = {
@@ -348,7 +310,7 @@ module.exports = {
     Sys,
 }
 
-},{}],9:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 (function (process){
 // mucko UnitTest.js
 
@@ -476,7 +438,7 @@ module.exports = {
 }
 
 }).call(this,require('_process'))
-},{"_process":15}],10:[function(require,module,exports){
+},{"_process":15}],8:[function(require,module,exports){
 (function (Buffer){
 // mucko strings.js
 
@@ -523,7 +485,7 @@ module.exports = {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"./Meta.js":7,"buffer":13}],11:[function(require,module,exports){
+},{"./Meta.js":5,"buffer":13}],9:[function(require,module,exports){
 // mucko util.js
 
 util = {
@@ -538,7 +500,45 @@ module.exports = {
     util,
 }
 
-},{}],12:[function(require,module,exports){
+},{}],10:[function(require,module,exports){
+// jscat runtests.js
+
+require("./test_canvas.js")
+
+UnitTest.run(Test)
+
+},{"./test_canvas.js":11}],11:[function(require,module,exports){
+// jscat test_canvas.js
+
+var mucko = require("mucko")
+var Meta = mucko.Meta
+var Test = mucko.Test
+var UnitTest = mucko.UnitTest
+var Base = mucko.Base
+var Sys = mucko.Sys
+var println = Base.println
+var stdout = Base.stdout
+
+
+if (Sys.isbrowser()) {
+    var createCanvas = function (w, h) {
+        var canvas = document.createElement('canvas')
+        canvas.width = w
+        canvas.height = h
+        return canvas
+    }
+} else {
+    var { createCanvas, loadImage, Canvas } = require('canvas')
+}
+
+Test.test_canvas = function () {
+    const canvas = createCanvas(200, 200)
+    const ctx = canvas.getContext('2d')
+    typ = Sys.isbrowser() ? HTMLCanvasElement : Canvas
+    assert_true(Meta.isa(canvas, typ))
+}
+
+},{"canvas":2,"mucko":"mucko"}],12:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -2760,4 +2760,4 @@ module.exports = {
     util,
 }
 
-},{"./src/Base.js":6,"./src/Meta.js":7,"./src/Sys.js":8,"./src/UnitTest.js":9,"./src/util.js":11}]},{},[1,4]);
+},{"./src/Base.js":4,"./src/Meta.js":5,"./src/Sys.js":6,"./src/UnitTest.js":7,"./src/util.js":9}]},{},[1,10]);
