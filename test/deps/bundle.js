@@ -438,7 +438,7 @@ module.exports = {
 }
 
 }).call(this,require('_process'))
-},{"_process":15}],8:[function(require,module,exports){
+},{"_process":14}],8:[function(require,module,exports){
 (function (Buffer){
 // mucko strings.js
 
@@ -485,7 +485,7 @@ module.exports = {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"./Meta.js":5,"buffer":13}],9:[function(require,module,exports){
+},{"./Meta.js":5,"buffer":12}],9:[function(require,module,exports){
 // mucko util.js
 
 util = {
@@ -501,13 +501,6 @@ module.exports = {
 }
 
 },{}],10:[function(require,module,exports){
-// jscat runtests.js
-
-require("./test_canvas.js")
-
-UnitTest.run(Test)
-
-},{"./test_canvas.js":11}],11:[function(require,module,exports){
 // jscat test_canvas.js
 
 var mucko = require("mucko")
@@ -538,7 +531,7 @@ Test.test_canvas = function () {
     assert_true(Meta.isa(canvas, typ))
 }
 
-},{"canvas":2,"mucko":"mucko"}],12:[function(require,module,exports){
+},{"canvas":2,"mucko":"mucko"}],11:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -691,7 +684,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],13:[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -2470,7 +2463,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":12,"ieee754":14}],14:[function(require,module,exports){
+},{"base64-js":11,"ieee754":13}],13:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -2556,7 +2549,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],15:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 

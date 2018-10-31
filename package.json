@@ -6,8 +6,9 @@
   "author": "WooKyoung Noh <wookay.noh@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "mucko": "^0.1.2",
-    "canvas": "^2.0.1"
+    "canvas": "^2.0.1",
+    "d3-3d": "^0.0.9",
+    "mucko": "^0.1.2"
   },
   "scripts": {
     "test": "node test/runtests.js"

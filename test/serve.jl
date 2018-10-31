@@ -17,6 +17,7 @@ end
 routes() do
     get("/", FrontController, index)
     plug(Plug.Static, at="/test", only=["index.html"], from=normpath(@__DIR__))
+    plug(Plug.Static, at="/test", only=["test_"], from=normpath(@__DIR__))
     plug(Plug.Static, at="/test/deps", from=normpath(@__DIR__, "deps"))
 end
 
