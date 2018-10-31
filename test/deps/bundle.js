@@ -518,6 +518,8 @@ if (Sys.isbrowser()) {
         var canvas = document.createElement('canvas')
         canvas.width = w
         canvas.height = h
+        var body = document.getElementsByTagName("body")[0]
+        body.appendChild(canvas)
         return canvas
     }
 } else {
