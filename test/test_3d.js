@@ -1,13 +1,10 @@
 // jscat test_3d.js
 
 var mucko = require("mucko")
-var Meta = mucko.Meta
 var Test = mucko.Test
-var UnitTest = mucko.UnitTest
+var Meta = mucko.Meta
 var Base = mucko.Base
 var Sys = mucko.Sys
-var println = Base.println
-var stdout = Base.stdout
 
 
 if (Sys.isbrowser()) {
@@ -23,6 +20,7 @@ if (Sys.isbrowser()) {
 
 // https://bl.ocks.org/niekes/293aa96c653b669ef0ca04fa4f1d5403
 function winding_order() {
+    let println = Base.println
     var data = [
         [{x:0,y:-1,z: 0},{x:-1,y:1,z: 0},{x:1,y:1,z: 0}],
         [{x:0,y:-1,z:-1},{x:-1,y:1,z:-1},{x:1,y:1,z:-1}],

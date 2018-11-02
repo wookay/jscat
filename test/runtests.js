@@ -1,6 +1,7 @@
 // jscat runtests.js
 
 require("./test_canvas.js")
+require("./test_slider.js")
 require("./test_3d.js")
 
 UnitTest.run(Test)

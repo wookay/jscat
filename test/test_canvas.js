@@ -1,13 +1,8 @@
 // jscat test_canvas.js
 
 var mucko = require("mucko")
-var Meta = mucko.Meta
 var Test = mucko.Test
-var UnitTest = mucko.UnitTest
 var Base = mucko.Base
-var Sys = mucko.Sys
-var println = Base.println
-var stdout = Base.stdout
 
 
 if (Sys.isbrowser()) {
@@ -24,6 +19,8 @@ if (Sys.isbrowser()) {
 }
 
 Test.test_canvas = function () {
+    var Sys = mucko.Sys
+    var Meta = mucko.Meta
     const canvas = createCanvas(200, 200)
     const ctx = canvas.getContext('2d')
     typ = Sys.isbrowser() ? HTMLCanvasElement : Canvas
