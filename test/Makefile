@@ -1,5 +1,5 @@
 bundle:
-	browserify -r mucko -r bootstrap-slider ../index.js test_canvas.js test_slider.js > deps/bundle.js
+	browserify -r mucko -r bootstrap-slider -r roughjs ../index.js test_canvas.js test_slider.js > deps/bundle.js
 	date '+%Y-%m-%d %H:%M:%S' > deps/browserified_at
 
 test:
@@ -13,3 +13,9 @@ slider:
 
 3d:
 	node -e 'require("./test_3d.js"); UnitTest.run(Test)'
+
+waveform:
+	node -e 'require("./test_waveform.js"); UnitTest.run(Test)'
+
+roughjs:
+	node -r roughjs -e 'require("./test_roughjs.js"); UnitTest.run(Test)'
