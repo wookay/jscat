@@ -3,20 +3,32 @@
 var mucko = require("mucko")
 var Test = mucko.Test
 var Sys = mucko.Sys
+var Base = mucko.Base
+var Meta = mucko.Meta
+var nouislider = require("nouislider")
 
 
 function make_slider() {
-    var Slider = require("bootstrap-slider")
-    var slider = new Slider('#ex1', {
-        formatter: function(value) {
-            return "Current value: " + value
+    var slider = document.getElementById("slider")
+    nouislider.create(slider, {
+        start: [20, 50],
+        connect: true,
+        range: {
+            min: 0,
+            max: 100,
         }
     })
-    var ex1 = document.getElementById("ex1")
-    assert_equal(10, ex1.value)
+    assert_true(Meta.isa(slider, HTMLDivElement))
+    assert_true(Meta.isa(slider.noUiSlider, Object))
+    assert_equal(slider.noUiSlider.target, slider)
+    let map = Base.map
+    assert_equal([20, 50], map(Number, slider.noUiSlider.get()))
+    assert_equal({min: 0, max: 100}, slider.noUiSlider.options.range)
 }
 
+
 Test.test_slider = function () {
+    assert_true(Meta.isa(nouislider, Object))
     if (Sys.isbrowser()) {
         make_slider()
     }
