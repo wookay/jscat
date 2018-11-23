@@ -5,5 +5,6 @@ require("./test_slider.js")
 require("./test_3d.js")
 require("./test_waveform.js")
 require("./test_roughjs.js")
+require("./test_graph.js")
 
 UnitTest.run(Test)

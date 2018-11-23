@@ -1,5 +1,12 @@
 // jscat test_waveform.js
 
+var mucko = require("mucko")
+var Test = mucko.Test
+var Meta = mucko.Meta
+var Base = mucko.Base
+var Sys = mucko.Sys
+
+
 // code from https://github.com/voixen/voixen-vad/blob/master/examples/waveform/waveform-generator.js#L200
 var resample = function(samples, rate) {
     let result = [], min = 1, max = -1, j = 0
@@ -19,13 +26,6 @@ var resample = function(samples, rate) {
 
     return result
 }
-
-var mucko = require("mucko")
-var Test = mucko.Test
-var Meta = mucko.Meta
-var Base = mucko.Base
-var Sys = mucko.Sys
-
 
 Test.test_waveform = function() {
     assert_equal(resample([1,5,10,5,1], 1), [1, 1, 1, 5, 1, 10, 1, 5, 1, 1])

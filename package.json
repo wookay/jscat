@@ -7,10 +7,12 @@
   "license": "MIT",
   "dependencies": {
     "canvas": "^2.0.1",
+    "d3": "^5.7.0",
     "d3-3d": "^0.0.9",
-    "mucko": "^0.1.4",
+    "mucko": "^0.1.5",
     "nouislider": "^12.1.0",
-    "roughjs": "^2.2.5"
+    "roughjs": "^2.2.5",
+    "vis": "^4.21.0"
   },
   "scripts": {
     "test": "node test/runtests.js"

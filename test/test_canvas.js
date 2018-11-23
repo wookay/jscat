@@ -3,25 +3,30 @@
 var mucko = require("mucko")
 var Test = mucko.Test
 var Base = mucko.Base
+var Sys = mucko.Sys
 
 
-if (Sys.isbrowser()) {
-    var createCanvas = function (w, h) {
-        var canvas = document.createElement('canvas')
-        canvas.width = w
-        canvas.height = h
-        var body = document.getElementsByTagName("body")[0]
-        body.appendChild(canvas)
-        return canvas
+function require_canvas() {
+    if (Sys.isbrowser()) {
+        var createCanvas = function (w, h) {
+            var canvas = document.createElement('canvas')
+            canvas.width = w
+            canvas.height = h
+            var container = document.getElementById('canvas-container')
+            container.appendChild(canvas)
+            return canvas
+        }
+        return { createCanvas, undefined, undefined }
+    } else {
+        var { createCanvas, loadImage, Canvas } = require('canvas')
+        return { createCanvas, loadImage, Canvas }
     }
-} else {
-    var { createCanvas, loadImage, Canvas } = require('canvas')
 }
 
 Test.test_canvas = function () {
-    var Sys = mucko.Sys
     var Meta = mucko.Meta
-    const canvas = createCanvas(200, 200)
+	let { createCanvas, loadImage, Canvas } = require_canvas()
+    const canvas = createCanvas(10, 10)
     const ctx = canvas.getContext('2d')
     typ = Sys.isbrowser() ? HTMLCanvasElement : Canvas
     assert_true(Meta.isa(canvas, typ))

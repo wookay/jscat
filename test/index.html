@@ -4,17 +4,20 @@ open index.html
 <html>
   <head>
     <title>jscat runtests</title>
-    <script src="../test/deps/d3.v4.min.js" type="text/javascript"></script>
-    <script src="../test/deps/d3-3d.min.js" type="text/javascript"></script>
+    <script src="../test/deps/bundle.js" type="text/javascript"></script>
     <link  href="../test/deps/nouislider.css" rel="stylesheet" />
+    <link  href="../test/deps/vis.min.css" rel="stylesheet" />
 <style>
+/* slider */
 div#slider {
     width: 300px;
     height: 20px;
     border: 1px solid gray;
 }
-div#slider .noUi-base, .noUi-connects {
-    position: static;
+/* canvas */
+div.paper {
+    width: 600px;
+    background-color: #eff1f1;
 }
 </style>
   </head>
@@ -22,18 +25,32 @@ div#slider .noUi-base, .noUi-connects {
 <pre id="stdout">
 </pre> <!-- pre#stdout -->
 
-<svg width="600" height="400"></svg>
+<!-- d3-3d -->
+<div id="triangles" class="paper"></div>
 <p />
-<a href="https://bl.ocks.org/niekes/293aa96c653b669ef0ca04fa4f1d5403">d3-3d: Winding Order</a>
-<a href="https://github.com/pshihn/rough">Rough.js</a>
-<a href="https://github.com/leongersen/noUiSlider">noUiSlider</a>
 
-<div id="slider" />
+<div id="vis-network" class="paper"></div>
+<p />
 
-<script src="../test/deps/bundle.js" type="text/javascript"></script>
+<div id="slider"></div>
+<span id="slider-range-value"></span>
+<p />
+
+<div id="canvas-container"></div>
+<p />
+
+<ul>
+  <li><a href="https://bl.ocks.org/niekes/293aa96c653b669ef0ca04fa4f1d5403">d3-3d: Winding Order</a></li>
+  <li><a href="https://github.com/pshihn/rough">Rough.js</a></li>
+  <li><a href="https://github.com/leongersen/noUiSlider">noUiSlider</a></li>
+  <li><a href="https://github.com/almende/vis">vis</a></li>
+</ul>
+
 <script src="../test/test_3d.js" type="text/javascript"></script>
 <script src="../test/test_slider.js" type="text/javascript"></script>
 <script src="../test/test_roughjs.js" type="text/javascript"></script>
+<script src="../test/test_graph.js" type="text/javascript"></script>
+<script src="../test/test_canvas.js" type="text/javascript"></script>
 <script>
 UnitTest.run(Test)
 </script>

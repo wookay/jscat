@@ -7,19 +7,10 @@ var Base = mucko.Base
 var Sys = mucko.Sys
 
 
-if (Sys.isbrowser()) {
-    var createSVG = function (w, h) {
-        var svg = document.createElement('svg')
-        svg.setAttribute("width", w)
-        svg.setAttribute("height", h)
-        var body = document.getElementsByTagName("body")[0]
-        body.appendChild(svg)
-        return svg
-    }
-}
-
 // https://bl.ocks.org/niekes/293aa96c653b669ef0ca04fa4f1d5403
-function winding_order() {
+function inbrowser_winding_order() {
+    var d3 = require("d3")
+    var D3 = require("d3-3d")
     let println = Base.println
     var data = [
         [{x:0,y:-1,z: 0},{x:-1,y:1,z: 0},{x:1,y:1,z: 0}],
@@ -28,15 +19,19 @@ function winding_order() {
         [{x:0,y:-1,z:-3},{x:-1,y:1,z:-3},{x:1,y:1,z:-3}],
         [{x:0,y:-1,z:-4},{x:-1,y:1,z:-4},{x:1,y:1,z:-4}]
     ];
+    var width = 600
+    var height = 400
     var origin  = [260, 180]
-    var svg     = d3.select('svg').call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
+    var svg     = d3.select('#triangles').append('svg')
+        .attr("width", width)
+        .attr("height", height)
+        .call(d3.drag().on('drag', dragged).on('start', dragStart).on('end', dragEnd)).append('g');
     var ccw     = true
     var color   = [d3.color('crimson'), d3.color('teal'), d3.color('limegreen'), d3.color('purple'), d3.color('tomato')];
     var alpha   = -0.3097959422289935, beta = -0.6021385919380436, mx = 260, my = 358
     var mouseX  = -69, mouseY = 71
 
-
-    var _3d = d3._3d()
+    var _3d = D3._3d()
         .scale(100)
         .x(function(d){ return d.x; })
         .y(function(d){ return d.y; })
@@ -89,14 +84,14 @@ function winding_order() {
     }
 
     processData(_3d.rotateY(beta).rotateX(alpha)(data3D));
-    assert_true(!Meta.isundef(d3._3d))
+    assert_true(!Meta.isundef(D3._3d))
 }
 
 Test.test_3d = function () {
     if (Sys.isbrowser()) {
-        winding_order()
+        inbrowser_winding_order()
     } else {
-        var d3 = require("d3-3d")
-        assert_true(!Meta.isundef(d3._3d))
+        var D3 = require("d3-3d")
+        assert_true(!Meta.isundef(D3._3d))
     }
 }

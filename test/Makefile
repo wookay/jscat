@@ -1,5 +1,5 @@
 bundle:
-	browserify -r mucko -r nouislider -r roughjs ../index.js test_canvas.js test_slider.js > deps/bundle.js
+	browserify -r mucko -r nouislider -r roughjs -r d3 -r d3-3d -r vis > deps/bundle.js
 	date '+%Y-%m-%d %H:%M:%S' > deps/browserified_at
 
 test:
@@ -12,10 +12,13 @@ slider:
 	node -r nouislider -e 'require("./test_slider.js"); UnitTest.run(Test)'
 
 3d:
-	node -e 'require("./test_3d.js"); UnitTest.run(Test)'
+	node -r d3 -r d3-3d -e 'require("./test_3d.js"); UnitTest.run(Test)'
 
 waveform:
 	node -e 'require("./test_waveform.js"); UnitTest.run(Test)'
 
 roughjs:
 	node -r roughjs -e 'require("./test_roughjs.js"); UnitTest.run(Test)'
+
+graph:
+	node -r vis -e 'require("./test_graph.js"); UnitTest.run(Test)'
