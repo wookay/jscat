@@ -22,3 +22,6 @@ roughjs:
 
 graph:
 	node -r vis -e 'require("./test_graph.js"); UnitTest.run(Test)'
+
+knob:
+	node -e 'require("./test_knob.js"); UnitTest.run(Test)'

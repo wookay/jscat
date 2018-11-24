@@ -18307,48 +18307,56 @@ function get_base() {
     var strings = require("./strings.js")
     var ranges = require("./range.js")
     var floats = require("./float.js")
+    var abstractarrays = require("./abstractarray.js")
     var arrays = require("./array.js")
     var parsing = require("./parse.js")
     Base = {
         // -- boot
-        DataType: boot.DataType,     // Base.DataType
-        Undefined: boot.Undefined,   // Base.Undefined
-        Null: boot.Null,             // Base.Null
-        Nothing: boot.Nothing,       // Base.Nothing
-        nothing: boot.nothing,       // Base.nothing
-        Bool: boot.Bool,             // Base.Bool
-        Int: boot.Int,               // Base.Int
-        Float64: boot.Float64,       // Base.Float64
+        DataType: boot.DataType,           // Base.DataType
+        Undefined: boot.Undefined,         // Base.Undefined
+        Null: boot.Null,                   // Base.Null
+        Nothing: boot.Nothing,             // Base.Nothing
+        nothing: boot.nothing,             // Base.nothing
+        Bool: boot.Bool,                   // Base.Bool
+        Int: boot.Int,                     // Base.Int
+        Float64: boot.Float64,             // Base.Float64
+        Exception: boot.Exception,         // Base.Exception
+        BoundsError: boot.BoundsError,     // Base.BoundsError
 
         // -- coreio
-        println: coreio.println,     // Base.println
-        IOBuffer: coreio.IOBuffer,   // Base.IOBuffer
-        seekstart: coreio.seekstart, // Base.seekstart
-        read: coreio.read,           // Base.read
-        stdout: coreio.stdout,       // Base.stdout
+        println: coreio.println,           // Base.println
+        IOBuffer: coreio.IOBuffer,         // Base.IOBuffer
+        seekstart: coreio.seekstart,       // Base.seekstart
+        read: coreio.read,                 // Base.read
+        stdout: coreio.stdout,             // Base.stdout
 
         // -- strings
-        String: strings.String,      // Base.String
-        string: strings.string,      // Base.string
-        split: strings.split,        // Base.split
-        join: strings.join,          // Base.join
-        repr: strings.repr,          // Base.repr
+        String: strings.String,            // Base.String
+        string: strings.string,            // Base.string
+        split: strings.split,              // Base.split
+        join: strings.join,                // Base.join
+        repr: strings.repr,                // Base.repr
 
         // -- range
-        range: ranges.range,         // Base.range
+        range: ranges.range,               // Base.range
 
         // -- float
-        Inf: floats.Inf,             // Base.Inf
-        round: floats.round,         // Base.round
+        Inf: floats.Inf,                   // Base.Inf
+        round: floats.round,               // Base.round
+
+        // -- abstractarray
+        isempty: abstractarrays.isempty,   // Base.isempty
+        getindex: abstractarrays.getindex, // Base.getindex
+        first: abstractarrays.first,       // Base.first
 
         // -- array
-        push: arrays.push,           // Base.push
-        pushfirst: arrays.pushfirst, // Base.pushfirst
-        splice: arrays.splice,       // Base.splice
-        map: arrays.map,             // Base.map
+        push: arrays.push,                 // Base.push
+        pushfirst: arrays.pushfirst,       // Base.pushfirst
+        splice: arrays.splice,             // Base.splice
+        map: arrays.map,                   // Base.map
 
         // -- parse
-        parse: parsing.parse,        // Base.parse
+        parse: parsing.parse,              // Base.parse
     }
     return Base
 }
@@ -18358,18 +18366,19 @@ module.exports = {
     Base: get_base(),
 }
 
-},{"./array.js":36,"./boot.js":37,"./coreio.js":38,"./float.js":39,"./parse.js":40,"./range.js":41,"./strings.js":42}],33:[function(require,module,exports){
+},{"./abstractarray.js":36,"./array.js":37,"./boot.js":38,"./coreio.js":39,"./float.js":40,"./parse.js":41,"./range.js":42,"./strings.js":43}],33:[function(require,module,exports){
 // mucko Meta.js
 
 function get_meta() {
     var boot = require("./boot.js")
     let DataType = boot.DataType
     let Undefined = boot.Undefined
+    let Exception = boot.Exception
     let Null = boot.Null
     Meta = {
         // Meta.isa
         isa: function(x, typ) {
-            return this.typeof(x) === typ
+            return this.typeof(x) === typ || x instanceof typ
         },
 
         // Meta.isundef
@@ -18420,7 +18429,7 @@ function get_meta() {
                 str = f.toString()
                 return str.substring(str.indexOf('{')+1, str.lastIndexOf('}')).trim()
             } else {
-                throw Error("Not a Function")
+                throw new Exception("Not a Function")
             }
         }
     }
@@ -18432,7 +18441,7 @@ module.exports = {
     Meta: get_meta(),
 }
 
-},{"./boot.js":37}],34:[function(require,module,exports){
+},{"./boot.js":38}],34:[function(require,module,exports){
 // mucko Sys.js
 
 function get_sys() {
@@ -18517,10 +18526,17 @@ test_throws = function(errmsg, f) {
     try {
         f()
     } catch (err) {
-        if (Error === errmsg) {
+        var boot = require("./boot.js")
+        let Exception = boot.Exception
+        if (err instanceof Exception) {
+            if (errmsg.message !== undefined) {
+                got_the_error = errmsg.message == err.message
+            } else {
+                got_the_error = true
+            }
+        } else if (err.prototype instanceof Exception) {
             got_the_error = true
-        } else if (errmsg.message == err.message) {
-            got_the_error = true
+        } else {
         }
     }
     if (!got_the_error) {
@@ -18596,7 +18612,38 @@ module.exports = {
 }
 
 }).call(this,require('_process'))
-},{"_process":47}],36:[function(require,module,exports){
+},{"./boot.js":38,"_process":48}],36:[function(require,module,exports){
+// mucko Base abstractarray.js
+
+var boot = require("./boot.js")
+var strings = require("./strings.js")
+
+
+function isempty(A) {
+    return A.length == 0
+}
+
+function getindex(A, I) {
+    let BoundsError = boot.BoundsError
+    let string = strings.string
+    if (isempty(A)) {
+        throw new BoundsError(string("BoundsError", ": attempt to access 0-element at index [", I, "]"))
+    }
+    return A[I-1]
+}
+
+function first(a) {
+    return getindex(a, 1)
+}
+
+
+module.exports = {
+    isempty,
+    getindex,
+    first,
+}
+
+},{"./boot.js":38,"./strings.js":43}],37:[function(require,module,exports){
 // mucko Base array.js
 
 var meta = require("./Meta.js")
@@ -18631,7 +18678,7 @@ module.exports = {
     map,
 }
 
-},{"./Meta.js":33}],37:[function(require,module,exports){
+},{"./Meta.js":33}],38:[function(require,module,exports){
 // mucko Base boot.js
 
 class DataType {
@@ -18652,6 +18699,13 @@ function Int() {
 function Float64() {
 }
 
+class Exception extends Error {
+
+}
+
+class BoundsError extends Exception {
+}
+
 
 module.exports = {
     DataType,
@@ -18662,9 +18716,11 @@ module.exports = {
     Bool: Boolean,
     Int,
     Float64,
+    Exception,
+    BoundsError,
 }
 
-},{}],38:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 // mucko Base coreio.js
 
 var meta = require("./Meta.js")
@@ -18717,7 +18773,7 @@ module.exports = {
     stdout: new TTY(),
 }
 
-},{"./Meta.js":33,"./strings.js":42}],39:[function(require,module,exports){
+},{"./Meta.js":33,"./strings.js":43}],40:[function(require,module,exports){
 // mucko Base float.js
 
 var boot = require("./boot.js")
@@ -18740,7 +18796,7 @@ module.exports = {
     round,
 }
 
-},{"./boot.js":37}],40:[function(require,module,exports){
+},{"./boot.js":38}],41:[function(require,module,exports){
 // mucko Base parse.js
 
 var boot = require("./boot.js")
@@ -18762,7 +18818,7 @@ module.exports = {
     parse,
 }
 
-},{"./boot.js":37}],41:[function(require,module,exports){
+},{"./boot.js":38}],42:[function(require,module,exports){
 // mucko Base range.js
 
 var boot = require("./boot.js")
@@ -18786,7 +18842,7 @@ module.exports = {
     range: _range,
 }
 
-},{"./boot.js":37}],42:[function(require,module,exports){
+},{"./boot.js":38}],43:[function(require,module,exports){
 (function (Buffer){
 // mucko Base strings.js
 
@@ -18848,7 +18904,7 @@ module.exports = {
 }
 
 }).call(this,require("buffer").Buffer)
-},{"./Meta.js":33,"./boot.js":37,"buffer":45}],43:[function(require,module,exports){
+},{"./Meta.js":33,"./boot.js":38,"buffer":46}],44:[function(require,module,exports){
 // mucko util.js
 
 util = {
@@ -18863,7 +18919,7 @@ module.exports = {
     util,
 }
 
-},{}],44:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -19016,7 +19072,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],45:[function(require,module,exports){
+},{}],46:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -20795,7 +20851,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":44,"ieee754":46}],46:[function(require,module,exports){
+},{"base64-js":45,"ieee754":47}],47:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -20881,7 +20937,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],47:[function(require,module,exports){
+},{}],48:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -21572,7 +21628,7 @@ module.exports = {
     util,
 }
 
-},{"./src/Base.js":32,"./src/Meta.js":33,"./src/Sys.js":34,"./src/UnitTest.js":35,"./src/util.js":43}],"nouislider":[function(require,module,exports){
+},{"./src/Base.js":32,"./src/Meta.js":33,"./src/Sys.js":34,"./src/UnitTest.js":35,"./src/util.js":44}],"nouislider":[function(require,module,exports){
 /*! nouislider - 12.1.0 - 10/25/2018 */
 (function(factory) {
     if (typeof define === "function" && define.amd) {
