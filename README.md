@@ -1,8 +1,11 @@
-### jscat playground
+### JavaScript playgrounds
 
 [![Build Status](https://travis-ci.org/wookay/jscat.svg?branch=master)](https://travis-ci.org/wookay/jscat)
 
-* mucko.js
-  https://github.com/wookay/mucko
+* packages
+  - 🍚 mucko    https://github.com/wookay/mucko
+  - 🍱 mucko.ui https://github.com/wookay/mucko.ui
 
-  - run tests https://wookay.github.io/docs/mucko/test/
+* playgrounds
+  - jscat tests https://wookay.github.io/docs/mucko/jscat/test/
+  - mucko.ui tests https://wookay.github.io/docs/mucko/mucko.ui/test/

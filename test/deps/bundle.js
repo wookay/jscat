@@ -18350,14 +18350,19 @@ function get_base() {
         parse: parsing.parse,              // JL Base.parse
     }
     var Core = require("./Core.js")
+    var Meta = require("./Meta.js")
+    var Sys = require("./Sys.js")
     Base.mergeI(Base, Core)
+    Base.Core = Core
+    Base.Meta = Meta
+    Base.Sys = Sys
     return Base
 }
 
 
 module.exports = get_base()
 
-},{"./Core.js":33,"./abstractarray.js":37,"./abstractdict.js":38,"./array.js":39,"./coreio.js":41,"./float.js":42,"./parse.js":44,"./range.js":45,"./strings.js":46}],33:[function(require,module,exports){
+},{"./Core.js":33,"./Meta.js":34,"./Sys.js":35,"./abstractarray.js":37,"./abstractdict.js":38,"./array.js":39,"./coreio.js":41,"./float.js":42,"./parse.js":44,"./range.js":45,"./strings.js":46}],33:[function(require,module,exports){
 // mucko Core.js
 
 function get_core() {
