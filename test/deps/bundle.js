@@ -18308,6 +18308,7 @@ function get_base() {
     var ranges = require("./range.js")
     var floats = require("./float.js")
     var abstractarrays = require("./abstractarray.js")
+    var abstractarraymath = require("./abstractarraymath.js")
     var abstractdicts = require("./abstractdict.js")
     var arrays = require("./array.js")
     var parsing = require("./parse.js")
@@ -18324,6 +18325,7 @@ function get_base() {
         split: strings.split,              // JL Base.split
         join: strings.join,                // JL Base.join
         repr: strings.repr,                // JL Base.repr
+        strip: strings.strip,              // JL Base.strip
 
         // -- range
         range: ranges.range,               // JL Base.range
@@ -18336,6 +18338,9 @@ function get_base() {
         isempty: abstractarrays.isempty,   // JL Base.isempty
         getindex: abstractarrays.getindex, // JL Base.getindex
         first: abstractarrays.first,       // JL Base.first
+
+        // -- abstractarraymath
+        repeat: abstractarraymath.repeat,  // JL Base.repeat
 
         // -- abstractdict
         mergeI: abstractdicts.mergeI,      // JL Base.merge!
@@ -18362,7 +18367,7 @@ function get_base() {
 
 module.exports = get_base()
 
-},{"./Core.js":33,"./Meta.js":34,"./Sys.js":35,"./abstractarray.js":37,"./abstractdict.js":38,"./array.js":39,"./coreio.js":41,"./float.js":42,"./parse.js":44,"./range.js":45,"./strings.js":46}],33:[function(require,module,exports){
+},{"./Core.js":33,"./Meta.js":34,"./Sys.js":35,"./abstractarray.js":37,"./abstractarraymath.js":38,"./abstractdict.js":39,"./array.js":40,"./coreio.js":42,"./float.js":43,"./parse.js":45,"./range.js":46,"./strings.js":47}],33:[function(require,module,exports){
 // mucko Core.js
 
 function get_core() {
@@ -18395,7 +18400,7 @@ function get_core() {
 
 module.exports = get_core()
 
-},{"./boot.js":40,"./metas.js":43,"./strings.js":46}],34:[function(require,module,exports){
+},{"./boot.js":41,"./metas.js":44,"./strings.js":47}],34:[function(require,module,exports){
 // mucko Meta.js
 
 function get_meta() {
@@ -18413,7 +18418,7 @@ function get_meta() {
 
 module.exports = get_meta()
 
-},{"./Core.js":33,"./abstractdict.js":38,"./metas.js":43}],35:[function(require,module,exports){
+},{"./Core.js":33,"./abstractdict.js":39,"./metas.js":44}],35:[function(require,module,exports){
 // mucko Sys.js
 
 function get_sys() {
@@ -18444,7 +18449,7 @@ function print(str) {
     document.getElementById('stdout').innerHTML += str
   }
 }
-function puts(str) {
+function println(str) {
   print(str + LF)
 }
 
@@ -18476,13 +18481,13 @@ var _assert_equal = function(expected, got, is_true) {
     if (UnitTest.dot_if_passed) {
       print(DOT)
     } else {
-      puts('passed: ' + inspect(expected))
+      println('passed: ' + inspect(expected))
     }
   } else {
-    puts('\nAssertion failed in ' +
+    println('\nAssertion failed in ' +
          extract_filename_line_from_stack_trace())
-    puts('Expected: ' + inspect(expected))
-    puts('Got: ' + inspect(got))
+    println('Expected: ' + inspect(expected))
+    println('Got: ' + inspect(got))
     UnitTest.failed += 1
   }
 }
@@ -18510,8 +18515,8 @@ test_throws = function(errmsg, f) {
         }
     }
     if (!got_the_error) {
-        puts('\nAssertion failed in ' + f)
-        puts('Expected: ' + errmsg)
+        println('\nAssertion failed in ' + f)
+        println('Expected: ' + errmsg)
         UnitTest.failed += 1
     }
 }
@@ -18522,13 +18527,13 @@ var _assert_true = function(is_true) {
     if (UnitTest.dot_if_passed) {
       print(DOT)
     } else {
-      puts('passed: ' + true)
+      println('passed: ' + true)
     }
   } else {
-    puts('\nAssertion failed in ' +
+    println('\nAssertion failed in ' +
          extract_filename_line_from_stack_trace())
-    puts('Expected: ' + true)
-    puts('Got: ' + is_true)
+    println('Expected: ' + true)
+    println('Got: ' + is_true)
     UnitTest.failed += 1
   }
 }
@@ -18554,7 +18559,7 @@ UnitTest = {
 
   run: function(test_target) {
     var startedAt = new Date()
-    puts('Started')
+    println('Started')
     for (var test_name in test_target) {
       if (test_name.match(/^test_/)) {
         this.tests += 1
@@ -18563,15 +18568,18 @@ UnitTest = {
     }
     var finishedAt = new Date()
     var elapsed = (finishedAt - startedAt) / 1000
-    puts('\nFinished in ' + elapsed + ' seconds.')
+    println('\nFinished in ' + elapsed + ' seconds.')
     this.report()
   },
 
   report: function() {
-    puts(this.tests + ' tests, ' +
-         this.passed + ' assertions, ' +
-         this.failed + ' failures, ' +
-         this.errors + ' errors')
+    if (this.failed == 0 && this.passed > 0) {
+      print("✅  ")
+    }
+    println(this.tests + ' tests, ' +
+      this.passed + ' assertions, ' +
+      this.failed + ' failures, ' +
+      this.errors + ' errors')
   },
 }
 
@@ -18582,8 +18590,8 @@ module.exports = {
 }
 
 }).call(this,require('_process'))
-},{"./boot.js":40,"_process":51}],37:[function(require,module,exports){
-// mucko Base abstractarray.js
+},{"./boot.js":41,"_process":52}],37:[function(require,module,exports){
+// mucko base/abstractarray.js
 
 var boot = require("./boot.js")
 var strings = require("./strings.js")
@@ -18613,7 +18621,24 @@ module.exports = {
     first,
 }
 
-},{"./boot.js":40,"./strings.js":46}],38:[function(require,module,exports){
+},{"./boot.js":41,"./strings.js":47}],38:[function(require,module,exports){
+// mucko base/abstractarraymath.js
+
+var boot = require("./boot.js")
+var strings = require("./strings.js")
+
+
+function repeat(A, counts) {
+    return Array.apply(null, { length: counts * A.length })
+                .map(function (e, i) { return A[i % A.length] })
+}
+
+
+module.exports = {
+    repeat,
+}
+
+},{"./boot.js":41,"./strings.js":47}],39:[function(require,module,exports){
 // mucko base/abstractdict.js
 
 
@@ -18629,8 +18654,8 @@ module.exports = {
     mergeI: mergeI,
 }
 
-},{}],39:[function(require,module,exports){
-// mucko Base array.js
+},{}],40:[function(require,module,exports){
+// mucko base/array.js
 
 function get_arrays() {
     var metas = require("./metas.js")
@@ -18662,8 +18687,8 @@ function get_arrays() {
 
 module.exports = get_arrays()
 
-},{"./metas.js":43}],40:[function(require,module,exports){
-// mucko Base boot.js
+},{"./metas.js":44}],41:[function(require,module,exports){
+// mucko base/boot.js
 
 class DataType {
 }
@@ -18704,7 +18729,7 @@ module.exports = {
     BoundsError,
 }
 
-},{}],41:[function(require,module,exports){
+},{}],42:[function(require,module,exports){
 // mucko base/coreio.js
 
 var strings = require("./strings.js")
@@ -18756,8 +18781,8 @@ module.exports = {
     stdout: new TTY(),
 }
 
-},{"./metas.js":43,"./strings.js":46}],42:[function(require,module,exports){
-// mucko Base float.js
+},{"./metas.js":44,"./strings.js":47}],43:[function(require,module,exports){
+// mucko base/float.js
 
 var boot = require("./boot.js")
 
@@ -18779,7 +18804,7 @@ module.exports = {
     round,
 }
 
-},{"./boot.js":40}],43:[function(require,module,exports){
+},{"./boot.js":41}],44:[function(require,module,exports){
 // mucko metas.js
 
 function get_metas() {
@@ -18850,8 +18875,8 @@ function get_metas() {
 
 module.exports = get_metas()
 
-},{"./boot.js":40}],44:[function(require,module,exports){
-// mucko Base parse.js
+},{"./boot.js":41}],45:[function(require,module,exports){
+// mucko base/parse.js
 
 var boot = require("./boot.js")
 
@@ -18872,8 +18897,8 @@ module.exports = {
     parse,
 }
 
-},{"./boot.js":40}],45:[function(require,module,exports){
-// mucko Base range.js
+},{"./boot.js":41}],46:[function(require,module,exports){
+// mucko base/range.js
 
 var boot = require("./boot.js")
 let nothing = boot.nothing
@@ -18896,7 +18921,7 @@ module.exports = {
     range: _range,
 }
 
-},{"./boot.js":40}],46:[function(require,module,exports){
+},{"./boot.js":41}],47:[function(require,module,exports){
 (function (Buffer){
 // mucko base/strings.js
 
@@ -18938,6 +18963,10 @@ function get_strings() {
             return strings.join(delim)
         }
     },
+
+    strip: function (s) { 
+        return s.trim()
+    },
     
     repr: function (x) {
         let typ = typeof(x);
@@ -18946,8 +18975,9 @@ function get_strings() {
         case "string": return string(quot, x, quot);
         default: return string(x);
         }
-    },
     }
+    }
+
     return strings
 }
 
@@ -18955,7 +18985,7 @@ function get_strings() {
 module.exports = get_strings()
 
 }).call(this,require("buffer").Buffer)
-},{"./boot.js":40,"./metas.js":43,"buffer":49}],47:[function(require,module,exports){
+},{"./boot.js":41,"./metas.js":44,"buffer":50}],48:[function(require,module,exports){
 // mucko util.js
 
 function get_util() {
@@ -18971,7 +19001,7 @@ function get_util() {
 
 module.exports = get_util()
 
-},{}],48:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 'use strict'
 
 exports.byteLength = byteLength
@@ -19124,7 +19154,7 @@ function fromByteArray (uint8) {
   return parts.join('')
 }
 
-},{}],49:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 /*!
  * The buffer module from node.js, for the browser.
  *
@@ -20903,7 +20933,7 @@ function numberIsNaN (obj) {
   return obj !== obj // eslint-disable-line no-self-compare
 }
 
-},{"base64-js":48,"ieee754":50}],50:[function(require,module,exports){
+},{"base64-js":49,"ieee754":51}],51:[function(require,module,exports){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
   var eLen = (nBytes * 8) - mLen - 1
@@ -20989,7 +21019,7 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -21683,7 +21713,7 @@ module.exports = {
     util,
 }
 
-},{"./src/Base.js":32,"./src/Core.js":33,"./src/Meta.js":34,"./src/Sys.js":35,"./src/UnitTest.js":36,"./src/util.js":47}],"nouislider":[function(require,module,exports){
+},{"./src/Base.js":32,"./src/Core.js":33,"./src/Meta.js":34,"./src/Sys.js":35,"./src/UnitTest.js":36,"./src/util.js":48}],"nouislider":[function(require,module,exports){
 /*! nouislider - 12.1.0 - 10/25/2018 */
 (function(factory) {
     if (typeof define === "function" && define.amd) {
